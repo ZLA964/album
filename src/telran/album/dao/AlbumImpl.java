@@ -26,8 +26,8 @@ public class AlbumImpl implements Album {
     }
 
     private boolean isPhoto(Photo newPhoto) {
-        for (Photo photo : photos) {
-            if (newPhoto.equals(photo)) {
+        for (int i = 0; i < size - 1; i++) {
+            if (newPhoto.equals(photos[i])) {
                 return true;
             }
         }
@@ -47,9 +47,9 @@ public class AlbumImpl implements Album {
 
     @Override
     public Photo getPhotoFromAlbum(int photoId, int albumId) {
-        for (Photo photo : photos) {
-            if (photo != null && photo.getAlbumId() == albumId && photo.getPhotoId() == photoId) {
-                return photo;
+        for (int i = 0; i < size - 1; i++) {
+            if (photos[i].getAlbumId() == albumId && photos[i].getPhotoId() == photoId) {
+                return photos[i];
             }
         }
         return null;
