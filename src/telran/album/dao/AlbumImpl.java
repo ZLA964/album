@@ -3,6 +3,7 @@ package telran.album.dao;
 import telran.album.model.Photo;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 public class AlbumImpl implements Album {
     private Photo[] photos;
@@ -41,8 +42,14 @@ public class AlbumImpl implements Album {
     }
 
     @Override
-    public boolean updatePhoto(int photoId, int albumId, String url) {
-        return false;
+    public boolean updatePhoto(int photoId, int albumId, String newUrl) {
+        Photo photo = getPhotoFromAlbum(photoId, albumId);
+        if (photo == null || newUrl == null || newUrl.isBlank()) {
+            return false;
+        }
+        ;
+        photo.setUrl(newUrl);
+        return true;
     }
 
     @Override
@@ -57,7 +64,15 @@ public class AlbumImpl implements Album {
 
     @Override
     public Photo[] getAllPhotoFromAlbum(int albumId) {
-        return new Photo[0];
+        Photo[] photosInAlbum = new Photo[size];
+        int inAlbum = 0;
+        for (int i = 0; i < size; i++) {
+            int thisPotoAlbumId = this.photos[i].getAlbumId();
+            if (albumId == thisPotoAlbumId ) {
+                photosInAlbum[inAlbum++] = this.photos[i];
+            }
+        }
+        return Arrays.copyOf(photosInAlbum, inAlbum);
     }
 
     @Override

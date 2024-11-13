@@ -65,7 +65,7 @@ public class Photo implements Comparable<Photo>{
         if (this == o) return true;
         if (!(o instanceof Photo photo)) return false;
 
-        return albumId == photo.albumId && photoId == photo.photoId;
+        return this.albumId == photo.albumId && this.photoId == photo.photoId;
     }
 
     @Override

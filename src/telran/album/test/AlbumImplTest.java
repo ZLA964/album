@@ -29,8 +29,8 @@ public class AlbumImplTest {
     void setUp() {
         // Инициализация альбомов и фото для тестов
         photos = new Photo[capacity];
-       album = new AlbumImpl(capacity); // предположительно, реализация интерфейса Album
-       album2 = new AlbumImpl(capacity);
+        album = new AlbumImpl(capacity); // предположительно, реализация интерфейса Album
+        album2 = new AlbumImpl(capacity);
 
         // Инициализация фото с разными параметрами
         photos[0] = new Photo(1, 1, "Title1", "url1", now.minusDays(7));
@@ -42,10 +42,9 @@ public class AlbumImplTest {
 
         newPhoto = new Photo(1, 5, "New Photo", "url5", now.minusDays(1));
 
-        for (int i = 0; i < photos.length-1; i++){
+        for (int i = 0; i < photos.length - 1; i++) {
             album.addPhoto(photos[i]);
         }
-
         // Добавление фото в альбомы
         album2.addPhoto(photos[4]);
         album2.addPhoto(photos[5]);
@@ -91,10 +90,11 @@ public class AlbumImplTest {
 
     @Test
     void testGetAllPhotoFromAlbum() {
-        Photo[] photoFromAlbum = album.getAllPhotoFromAlbum(2);
-        assertEquals(2, photoFromAlbum.length, "Второй альбом должен содержать 2 фотографии");
-        Arrays.sort(photoFromAlbum, comparator);
-        assertEquals(new Photo[] { photos[3], photos[4] } , photoFromAlbum);
+        Photo[] actual = album.getAllPhotoFromAlbum(2);
+        assertEquals(2, actual.length, "Второй альбом должен содержать 2 фотографии");
+        Arrays.sort(actual, comparator);
+        Photo[] expected = { photos[3], photos[4] };
+        assertArrayEquals( expected , actual);
 
     }
 
