@@ -27,7 +27,7 @@ public class AlbumImpl implements Album {
     }
 
     private boolean isPhoto(Photo newPhoto) {
-        for (int i = 0; i < size - 1; i++) {
+        for (int i = 0; i < size; i++) {
             if (newPhoto.equals(photos[i])) {
                 return true;
             }
@@ -35,10 +35,25 @@ public class AlbumImpl implements Album {
         return false;
     }
 
-
     @Override
     public boolean removePhoto(int photoId, int albumId) {
-        return false;
+        int indexPhotoForRemove = indexPhoto(photoId, albumId);
+        if (indexPhotoForRemove < 0) {
+            return false;
+        }
+        System.arraycopy(photos, indexPhotoForRemove + 1, photos, indexPhotoForRemove,
+                size - indexPhotoForRemove - 1);
+        photos[--size] = null;
+        return true;
+    }
+
+    private int indexPhoto(int photoId, int albumId) {
+        for (int i = 0; i < size; i++) {
+            if (photos[i].getAlbumId() == albumId && photos[i].getPhotoId() == photoId) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
@@ -47,14 +62,13 @@ public class AlbumImpl implements Album {
         if (photo == null || newUrl == null || newUrl.isBlank()) {
             return false;
         }
-        ;
         photo.setUrl(newUrl);
         return true;
     }
 
     @Override
     public Photo getPhotoFromAlbum(int photoId, int albumId) {
-        for (int i = 0; i < size - 1; i++) {
+        for (int i = 0; i < size; i++) {
             if (photos[i].getAlbumId() == albumId && photos[i].getPhotoId() == photoId) {
                 return photos[i];
             }
@@ -68,7 +82,7 @@ public class AlbumImpl implements Album {
         int inAlbum = 0;
         for (int i = 0; i < size; i++) {
             int thisPotoAlbumId = this.photos[i].getAlbumId();
-            if (albumId == thisPotoAlbumId ) {
+            if (albumId == thisPotoAlbumId) {
                 photosInAlbum[inAlbum++] = this.photos[i];
             }
         }
@@ -77,7 +91,16 @@ public class AlbumImpl implements Album {
 
     @Override
     public Photo[] getPhotoBetweenDate(LocalDate dateFrom, LocalDate dateTo) {
-        return new Photo[0];
+        Photo[] photosBetween = new Photo[size];
+        int inAlbum = 0;
+        for (int i = 0; i < size; i++) {
+            LocalDate lacalDatePhoto = this.photos[i].getDate().toLocalDate();
+            if ((lacalDatePhoto.isEqual(dateFrom) || dateFrom.isBefore(lacalDatePhoto))
+                    && dateTo.isAfter(lacalDatePhoto)) {
+                photosBetween[inAlbum++] = this.photos[i];
+            }
+        }
+        return Arrays.copyOf(photosBetween, inAlbum);
     }
 
     @Override

@@ -68,8 +68,8 @@ public class AlbumImplTest {
         assertFalse(album.removePhoto(1,1));
         assertTrue(album.removePhoto(2, 1), "Фото должно быть удалено из альбома");
         assertTrue(album.removePhoto(3, 1), "Фото должно быть удалено из альбома");
-        assertTrue(album.removePhoto(2, 1), "Фото должно быть удалено из альбома");
-        assertTrue(album.removePhoto(2, 4), "Фото должно быть удалено из альбома");
+        assertTrue(album.removePhoto(1, 2), "Фото должно быть удалено из альбома");
+        assertTrue(album.removePhoto(4, 2), "Фото должно быть удалено из альбома");
         assertEquals(0, album.size(), "Размер альбома должен уменьшиться до 2");
         assertFalse(album.removePhoto(4,1),"альбом уже пустой");
     }
