@@ -121,9 +121,15 @@ public class AlbumImpl implements Album {
     }
 
     private Photo[] photosByPredicateThrowIndex(Predicate<Photo> predicate){
-        int[] indexes = findIndexPhotosByPredicate(predicate)
-        Photo[] result = new Photo[indexes.length];
-        for(int i=0; i<indexes.length; i++){
+        int iTrue = 0;
+        int[] indexes = new int[size];
+        for (int index = 0; index < size; index++) {
+            if (predicate.test(photos[index])) {
+                indexes[iTrue++] = index;
+            }
+        }
+        Photo[] result = new Photo[iTrue];
+        for(int i=0; i<iTrue; i++){
             result[i]=this.photos[indexes[i]];
         }
         return result;
