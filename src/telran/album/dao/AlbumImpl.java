@@ -109,8 +109,7 @@ public class AlbumImpl implements Album {
         return size;
     }
 
-
-    private int[] findIndexPhotosByPredicat(Predicate<Photo> predicate) {
+    private int[] findIndexPhotosByPredicate(Predicate<Photo> predicate) {
         int iTrue = 0;
         int[] indexes = new int[size];
         for (int index = 0; index < size; index++) {
@@ -120,4 +119,25 @@ public class AlbumImpl implements Album {
         }
         return Arrays.copyOf(indexes, iTrue);
     }
+
+    private Photo[] photosByPredicateThrowIndex(Predicate<Photo> predicate){
+        int[] indexes = findIndexPhotosByPredicate(predicate)
+        Photo[] result = new Photo[indexes.length];
+        for(int i=0; i<indexes.length; i++){
+            result[i]=this.photos[indexes[i]];
+        }
+        return result;
+    }
+
+    private Photo[] photosByPredicate(Predicate<Photo> predicate){
+        Photo[] result = new Photo[size];
+        int iTrue = 0;
+        for (int index = 0; index < size; index++) {
+            if (predicate.test(photos[index])) {
+                result[iTrue++] = photos[index];
+            }
+        }
+        return Arrays.copyOf(result, iTrue);
+    }
+
 }
