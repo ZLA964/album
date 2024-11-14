@@ -4,6 +4,7 @@ import telran.album.model.Photo;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.function.Predicate;
 
 public class AlbumImpl implements Album {
     private Photo[] photos;
@@ -106,5 +107,17 @@ public class AlbumImpl implements Album {
     @Override
     public int size() {
         return size;
+    }
+
+
+    private int[] findIndexPhotosByPredicat(Predicate<Photo> predicate) {
+        int iTrue = 0;
+        int[] indexes = new int[size];
+        for (int index = 0; index < size; index++) {
+            if (predicate.test(photos[index])) {
+                indexes[iTrue++] = index;
+            }
+        }
+        return Arrays.copyOf(indexes, iTrue);
     }
 }
