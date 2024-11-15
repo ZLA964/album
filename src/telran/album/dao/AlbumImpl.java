@@ -20,10 +20,21 @@ public class AlbumImpl implements Album {
 
     @Override
     public boolean addPhoto(Photo photo) {
+
         if (this.size == photos.length || photo == null || isPhoto(photo))
             return false;
-        photos[this.size] = photo;
+        int newIndex = 0;
+        if(size !=0 ) { newIndex = Arrays.binarySearch(photos, 0, size,photo);}
+
+        if( newIndex < 0) {newIndex = -1 - newIndex;}
+        if ( newIndex < size ) {
+
+            System.arraycopy(photos, newIndex, photos, newIndex + 1, size - newIndex);
+        }
+
+        photos[newIndex] = photo;
         this.size++;
+
         return true;
     }
 
@@ -120,7 +131,7 @@ public class AlbumImpl implements Album {
         return Arrays.copyOf(indexes, iTrue);
     }
 
-    private Photo[] photosByPredicateThrowIndex(Predicate<Photo> predicate){
+    private Photo[] photosByPredicateThrowIndex(Predicate<Photo> predicate) {
         int iTrue = 0;
         int[] indexes = new int[size];
         for (int index = 0; index < size; index++) {
@@ -129,13 +140,16 @@ public class AlbumImpl implements Album {
             }
         }
         Photo[] result = new Photo[iTrue];
-        for(int i=0; i<iTrue; i++){
-            result[i]=this.photos[indexes[i]];
+        for (int i = 0; i < iTrue; i++) {
+            result[i] = this.photos[indexes[i]];
         }
         return result;
     }
 
-    private Photo[] photosByPredicate(Predicate<Photo> predicate){
+
+
+
+    private Photo[] photosByPredicate(Predicate<Photo> predicate) {
         Photo[] result = new Photo[size];
         int iTrue = 0;
         for (int index = 0; index < size; index++) {
@@ -145,5 +159,6 @@ public class AlbumImpl implements Album {
         }
         return Arrays.copyOf(result, iTrue);
     }
+
 
 }

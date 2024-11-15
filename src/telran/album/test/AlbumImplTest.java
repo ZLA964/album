@@ -113,6 +113,37 @@ public class AlbumImplTest {
         assertEquals(capacity-1, album.size(), "Первый альбом должен содержать 3 фотографии");
         assertEquals(4, album2.size(), "Второй альбом должен содержать 4 фотографии");
     }
+
+
+
+    @Test
+    void testSortingByDateAfterAddAndRemove() {
+        int albumId = 1; // Проверяем сортировку для конкретного альбома (например, albumId=1)
+
+        // Проверяем, что фотографии из альбома отсортированы по дате в начале
+        Photo[] initialPhotos = album.getAllPhotoFromAlbum(albumId);
+        Photo[] sortedPhotosByDate = Arrays.copyOf(initialPhotos, initialPhotos.length);
+        Arrays.sort(sortedPhotosByDate, Comparator.comparing(Photo::getDate));
+        assertArrayEquals(sortedPhotosByDate, initialPhotos, "Фотографии в альбоме должны быть отсортированы по дате в начале");
+
+        // Добавляем новую фотографию с другой датой
+        Photo photoToAdd = new Photo(albumId, 5, "Added Photo", "url5", now.minusDays(1));
+        album.addPhoto(photoToAdd);
+        Photo[] afterAdd = album.getAllPhotoFromAlbum(albumId);
+        Photo[] expectedAfterAdd = Arrays.copyOf(afterAdd, afterAdd.length);
+        Arrays.sort(expectedAfterAdd, Comparator.comparing(Photo::getDate));
+        assertArrayEquals(expectedAfterAdd, afterAdd, "Фотографии в альбоме должны быть отсортированы по дате после добавления");
+
+        // Удаляем фотографию
+        assertTrue(album.removePhoto(albumId, 2), "Фотография с albumId=1 и photoId=2 должна быть удалена");
+        Photo[] afterRemove = album.getAllPhotoFromAlbum(albumId);
+        Photo[] expectedAfterRemove = Arrays.copyOf(afterRemove, afterRemove.length);
+        Arrays.sort(expectedAfterRemove, Comparator.comparing(Photo::getDate));
+        assertArrayEquals(expectedAfterRemove, afterRemove, "Фотографии в альбоме должны быть отсортированы по дате после удаления");
+    }
+
+
+
 }
 
 
