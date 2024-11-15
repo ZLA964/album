@@ -20,21 +20,18 @@ public class AlbumImpl implements Album {
 
     @Override
     public boolean addPhoto(Photo photo) {
-
         if (this.size == photos.length || photo == null || isPhoto(photo))
             return false;
         int newIndex = 0;
-        if(size !=0 ) { newIndex = Arrays.binarySearch(photos, 0, size,photo);}
-
-        if( newIndex < 0) {newIndex = -1 - newIndex;}
-        if ( newIndex < size ) {
-
-            System.arraycopy(photos, newIndex, photos, newIndex + 1, size - newIndex);
+        if (size != 0) {
+            newIndex = Arrays.binarySearch(photos, 0, size, photo);
         }
-
+        if (newIndex < 0) {
+            newIndex = -1 - newIndex;
+        }
+        System.arraycopy(photos, newIndex, photos, newIndex + 1, size - newIndex);
         photos[newIndex] = photo;
-        this.size++;
-
+        size++;
         return true;
     }
 
@@ -145,8 +142,6 @@ public class AlbumImpl implements Album {
         }
         return result;
     }
-
-
 
 
     private Photo[] photosByPredicate(Predicate<Photo> predicate) {
