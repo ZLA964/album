@@ -9,13 +9,9 @@ import java.util.function.Predicate;
 public class AlbumImpl implements Album {
     private Photo[] photos;
     private int size;
-//    private int indexPhotosId[];
-//    private int indexPhotosDate[];
 
     public AlbumImpl(int capacity) {
         this.photos = new Photo[capacity];
-//        this.indexPhotosId = new int[capacity];
-//        this.indexPhotosDate = new int[capacity];
     }
 
     @Override
