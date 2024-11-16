@@ -58,17 +58,16 @@ public class AlbumImpl implements Album {
 
     @Override
     public boolean updatePhoto(int photoId, int albumId, String newUrl) {
+        if (newUrl == null || newUrl.isBlank()) return false;
         Photo photo = getPhotoFromAlbum(photoId, albumId);
-        if (photo == null || newUrl == null || newUrl.isBlank()) {
-            return false;
-        }
+        if (photo == null) return false;
         photo.setUrl(newUrl);
         return true;
     }
 
     @Override
     public Photo getPhotoFromAlbum(int photoId, int albumId) {
-        int index = indexPhoto(photoId,albumId);
+        int index = indexPhoto(photoId, albumId);
         return index < 0 ? null : photos[index];
     }
 
