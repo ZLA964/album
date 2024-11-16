@@ -18,13 +18,8 @@ public class AlbumImpl implements Album {
     public boolean addPhoto(Photo photo) {
         if (this.size == photos.length || photo == null || isPhoto(photo))
             return false;
-        int newIndex = 0;
-        if (size != 0) {
-            newIndex = Arrays.binarySearch(photos, 0, size, photo);
-        }
-        if (newIndex < 0) {
-            newIndex = -1 - newIndex;
-        }
+        int newIndex = Arrays.binarySearch(photos, 0, size, photo)
+        newIndex = newIndex < 0 ? -1 - newIndex : newIndex;
         System.arraycopy(photos, newIndex, photos, newIndex + 1, size - newIndex);
         photos[newIndex] = photo;
         size++;
@@ -73,39 +68,47 @@ public class AlbumImpl implements Album {
 
     @Override
     public Photo getPhotoFromAlbum(int photoId, int albumId) {
-        for (int i = 0; i < size; i++) {
-            if (photos[i].getAlbumId() == albumId && photos[i].getPhotoId() == photoId) {
-                return photos[i];
-            }
-        }
-        return null;
+//        for (int i = 0; i < size; i++) {
+//            if (photos[i].getAlbumId() == albumId && photos[i].getPhotoId() == photoId) {
+//                return photos[i];
+//            }
+//        }
+//        return null;
+        int index = indexPhoto(photoId,albumId);
+        return index < 0 ? null : photos[index];
     }
 
     @Override
     public Photo[] getAllPhotoFromAlbum(int albumId) {
-        Photo[] photosInAlbum = new Photo[size];
-        int inAlbum = 0;
-        for (int i = 0; i < size; i++) {
-            int thisPotoAlbumId = this.photos[i].getAlbumId();
-            if (albumId == thisPotoAlbumId) {
-                photosInAlbum[inAlbum++] = this.photos[i];
-            }
-        }
-        return Arrays.copyOf(photosInAlbum, inAlbum);
+//        Photo[] photosInAlbum = new Photo[size];
+//        int inAlbum = 0;
+//        for (int i = 0; i < size; i++) {
+//            int thisPotoAlbumId = this.photos[i].getAlbumId();
+//            if (albumId == thisPotoAlbumId) {
+//                photosInAlbum[inAlbum++] = this.photos[i];
+//            }
+//        }
+//        return Arrays.copyOf(photosInAlbum, inAlbum);
+        return photosByPredicateThrowIndex(photo -> photo.getAlbumId() == albumId);
     }
 
     @Override
     public Photo[] getPhotoBetweenDate(LocalDate dateFrom, LocalDate dateTo) {
-        Photo[] photosBetween = new Photo[size];
-        int inAlbum = 0;
-        for (int i = 0; i < size; i++) {
-            LocalDate lacalDatePhoto = this.photos[i].getDate().toLocalDate();
-            if ((lacalDatePhoto.isEqual(dateFrom) || dateFrom.isBefore(lacalDatePhoto))
-                    && dateTo.isAfter(lacalDatePhoto)) {
-                photosBetween[inAlbum++] = this.photos[i];
-            }
-        }
-        return Arrays.copyOf(photosBetween, inAlbum);
+//        Photo[] photosBetween = new Photo[size];
+//        int inAlbum = 0;
+//        for (int i = 0; i < size; i++) {
+//            LocalDate lacalDatePhoto = this.photos[i].getDate().toLocalDate();
+//            if ((lacalDatePhoto.isEqual(dateFrom) || dateFrom.isBefore(lacalDatePhoto))
+//                    && dateTo.isAfter(lacalDatePhoto)) {
+//                photosBetween[inAlbum++] = this.photos[i];
+//            }
+//        }
+//        return Arrays.copyOf(photosBetween, inAlbum);
+        return photosByPredicateThrowIndex(photo -> {
+                    LocalDate photoDate = photo.getDate().toLocalDate();
+                    return (!dateFrom.isAfter(photoDate) && dateTo.isAfter(photoDate));
+                }
+        );
     }
 
     @Override
@@ -139,7 +142,7 @@ public class AlbumImpl implements Album {
         return result;
     }
 
-
+/*  method from Eduard:
     private Photo[] photosByPredicate(Predicate<Photo> predicate) {
         Photo[] result = new Photo[size];
         int iTrue = 0;
@@ -150,6 +153,6 @@ public class AlbumImpl implements Album {
         }
         return Arrays.copyOf(result, iTrue);
     }
-
+*/
 
 }
