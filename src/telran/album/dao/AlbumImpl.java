@@ -3,6 +3,7 @@ package telran.album.dao;
 import telran.album.model.Photo;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.function.Predicate;
@@ -10,7 +11,7 @@ import java.util.function.Predicate;
 public class AlbumImpl implements Album {
     private Photo[] photos;
     private int size;
-    private Comparator<Photo> comparator = (p1,p2) -> p1.getDate().compareTo(p1.getDate());
+    private Comparator<Photo> comparator = (p1, p2) -> p1.getDate().compareTo(p1.getDate());
 
 
     public AlbumImpl(int capacity) {
@@ -81,11 +82,25 @@ public class AlbumImpl implements Album {
 
     @Override
     public Photo[] getPhotoBetweenDate(LocalDate dateFrom, LocalDate dateTo) {
-        return photosByPredicateThrowIndex(photo -> {
-                    LocalDate photoDate = photo.getDate().toLocalDate();
-                    return (!dateFrom.isAfter(photoDate) && dateTo.isAfter(photoDate));
-                }
-        );
+        Photo fromPhoto = new Photo(0, 0, "From", "urlRfom", dateFrom.atStartOfDay());
+        Photo toPhoto = new Photo(0, 0, "to", "urlTo", dateTo.atStartOfDay());
+        int iFrom = Arrays.binarySearch(photos, fromPhoto);
+        System.out.println("iFrom= "+ iFrom);
+        iFrom = iFrom > 0 ? iFrom : -1-iFrom;
+        int iTo = Arrays.binarySearch(photos, toPhoto);
+        System.out.println(" iTo= " + iTo);
+        iTo = iTo > 0 ? iTo  :  -1 - iTo;
+        System.out.println("iFrom= "+ iFrom + " iTo= " + iTo);
+        Photo[] result = new Photo[iTo - iFrom];
+//        for (Photo photo : result) {
+//            photo = photos[iFrom++];
+//        }
+        for(int i = iFrom, j=0; i < iTo; i++,j++) {
+            result[j] = photos[i];
+            System.out.println(result[j]);
+        }
+
+    return result;
     }
 
     @Override
