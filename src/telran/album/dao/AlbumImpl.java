@@ -85,21 +85,13 @@ public class AlbumImpl implements Album {
         Photo fromPhoto = new Photo(0, 0, "From", "urlRfom", dateFrom.atStartOfDay());
         Photo toPhoto = new Photo(0, 0, "to", "urlTo", dateTo.atStartOfDay());
         int iFrom = Arrays.binarySearch(photos, fromPhoto);
-        System.out.println("iFrom= "+ iFrom);
         iFrom = iFrom > 0 ? iFrom : -1-iFrom;
         int iTo = Arrays.binarySearch(photos, toPhoto);
-        System.out.println(" iTo= " + iTo);
         iTo = iTo > 0 ? iTo  :  -1 - iTo;
-        System.out.println("iFrom= "+ iFrom + " iTo= " + iTo);
         Photo[] result = new Photo[iTo - iFrom];
-//        for (Photo photo : result) {
-//            photo = photos[iFrom++];
-//        }
         for(int i = iFrom, j=0; i < iTo; i++,j++) {
             result[j] = photos[i];
-            System.out.println(result[j]);
         }
-
     return result;
     }
 
