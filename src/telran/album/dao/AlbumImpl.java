@@ -18,7 +18,7 @@ public class AlbumImpl implements Album {
     public boolean addPhoto(Photo photo) {
         if (this.size == photos.length || photo == null || isPhoto(photo))
             return false;
-        int newIndex = Arrays.binarySearch(photos, 0, size, photo)
+        int newIndex = Arrays.binarySearch(photos, 0, size, photo);
         newIndex = newIndex < 0 ? -1 - newIndex : newIndex;
         System.arraycopy(photos, newIndex, photos, newIndex + 1, size - newIndex);
         photos[newIndex] = photo;
