@@ -68,42 +68,17 @@ public class AlbumImpl implements Album {
 
     @Override
     public Photo getPhotoFromAlbum(int photoId, int albumId) {
-//        for (int i = 0; i < size; i++) {
-//            if (photos[i].getAlbumId() == albumId && photos[i].getPhotoId() == photoId) {
-//                return photos[i];
-//            }
-//        }
-//        return null;
         int index = indexPhoto(photoId,albumId);
         return index < 0 ? null : photos[index];
     }
 
     @Override
     public Photo[] getAllPhotoFromAlbum(int albumId) {
-//        Photo[] photosInAlbum = new Photo[size];
-//        int inAlbum = 0;
-//        for (int i = 0; i < size; i++) {
-//            int thisPotoAlbumId = this.photos[i].getAlbumId();
-//            if (albumId == thisPotoAlbumId) {
-//                photosInAlbum[inAlbum++] = this.photos[i];
-//            }
-//        }
-//        return Arrays.copyOf(photosInAlbum, inAlbum);
         return photosByPredicateThrowIndex(photo -> photo.getAlbumId() == albumId);
     }
 
     @Override
     public Photo[] getPhotoBetweenDate(LocalDate dateFrom, LocalDate dateTo) {
-//        Photo[] photosBetween = new Photo[size];
-//        int inAlbum = 0;
-//        for (int i = 0; i < size; i++) {
-//            LocalDate lacalDatePhoto = this.photos[i].getDate().toLocalDate();
-//            if ((lacalDatePhoto.isEqual(dateFrom) || dateFrom.isBefore(lacalDatePhoto))
-//                    && dateTo.isAfter(lacalDatePhoto)) {
-//                photosBetween[inAlbum++] = this.photos[i];
-//            }
-//        }
-//        return Arrays.copyOf(photosBetween, inAlbum);
         return photosByPredicateThrowIndex(photo -> {
                     LocalDate photoDate = photo.getDate().toLocalDate();
                     return (!dateFrom.isAfter(photoDate) && dateTo.isAfter(photoDate));
