@@ -4,11 +4,14 @@ import telran.album.model.Photo;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 public class AlbumImpl implements Album {
     private Photo[] photos;
     private int size;
+    private Comparator<Photo> comparator = (p1,p2) -> p1.getDate().compareTo(p1.getDate());
+
 
     public AlbumImpl(int capacity) {
         this.photos = new Photo[capacity];
