@@ -20,7 +20,7 @@ public class AlbumImplTest {
     private Album album2;
     private Photo  newPhoto;
     private Photo[] photos;
-    private final Comparator<Photo> comparator = (p1,p2) -> {
+    private final Comparator<Photo> comparatorT = (p1,p2) -> {
        int res = Integer.compare(p1.getAlbumId(), p2.getAlbumId());
        return res != 0 ? res : Integer.compare(p1.getPhotoId(),p2.getPhotoId());
     };
@@ -34,10 +34,13 @@ public class AlbumImplTest {
 
         // Инициализация фото с разными параметрами
         photos[0] = new Photo(1, 1, "Title1", "url1", now.minusDays(7));
-        photos[1] = new Photo(1, 2, "Title2", "url2", now.minusDays(6));
-        photos[2] = new Photo(1, 3, "Title3", "url3", now.minusDays(5));
-        photos[3] = new Photo(2, 1, "Title1", "url1", now.minusDays(4));
-        photos[4] = new Photo(2, 4, "Title4", "url4", now.minusDays(3));
+        photos[1] = new Photo(1, 2, "Title2", "url2", LocalDate.now().minusDays(5).atStartOfDay());
+        System.out.println(now.minusDays(6));
+        photos[2] = new Photo(1, 3, "Title3", "url3", LocalDate.now().minusDays(5).atStartOfDay());
+        photos[3] = new Photo(2, 1, "Title1", "url1", now.minusDays(5));
+        System.out.println(now.minusDays(4));
+        photos[4] = new Photo(2, 4, "Title4", "url4", now.minusDays(5));
+        System.out.println(now.minusDays(3));
         photos[5] = new Photo(1, 4, "Title4", "url4", now.minusDays(2));
 
         newPhoto = new Photo(1, 5, "New Photo", "url5", now.minusDays(1));
@@ -92,7 +95,7 @@ public class AlbumImplTest {
     void testGetAllPhotoFromAlbum() {
         Photo[] actual = album.getAllPhotoFromAlbum(2);
         assertEquals(2, actual.length, "Второй альбом должен содержать 2 фотографии");
-        Arrays.sort(actual, comparator);
+        Arrays.sort(actual, comparatorT);
         Photo[] expected = { photos[3], photos[4] };
         assertArrayEquals( expected , actual);
 
@@ -100,11 +103,14 @@ public class AlbumImplTest {
 
     @Test
     void testGetPhotoBetweenDate() {
-        LocalDate dateFrom = now.minusDays(6).toLocalDate() ;
+        LocalDate dateFrom = now.minusDays(5).toLocalDate() ;
         LocalDate dateTo = now.minusDays(3).toLocalDate() ;
-        Photo[] expectedPhotos = new Photo[]{photos[1], photos[2], photos[3]};
+        Photo[] expectedPhotos = new Photo[]{photos[1], photos[2], photos[3], photos[4]};
+        System.out.println("--test--");
+        System.out.println(dateFrom);
+        System.out.println(dateTo);
         Photo[] actualPhotos = album.getPhotoBetweenDate(dateFrom, dateTo);
-        Arrays.sort(actualPhotos, comparator);
+        Arrays.sort(actualPhotos, comparatorT);
         assertArrayEquals(expectedPhotos, actualPhotos, "Массив фотографий должен совпадать с ожидаемым");
     }
 

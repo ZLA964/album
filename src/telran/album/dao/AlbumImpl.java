@@ -11,7 +11,10 @@ import java.util.function.Predicate;
 public class AlbumImpl implements Album {
     private Photo[] photos;
     private int size;
-    private Comparator<Photo> comparator = (p1, p2) -> p1.getDate().compareTo(p1.getDate());
+    private Comparator<Photo> comparator = (p1, p2) ->{
+       int  res = p1.getDate().compareTo(p2.getDate());
+       return res != 0 ? res : Integer.compare(p1.getPhotoId(),p2.getPhotoId());
+    } ;
 
 
     public AlbumImpl(int capacity) {
@@ -22,11 +25,13 @@ public class AlbumImpl implements Album {
     public boolean addPhoto(Photo photo) {
         if (this.size == photos.length || photo == null || isPhoto(photo))
             return false;
-        int newIndex = Arrays.binarySearch(photos, 0, size, photo);
+        int newIndex = Arrays.binarySearch(photos, 0, size, photo, comparator);
         newIndex = newIndex < 0 ? -1 - newIndex : newIndex;
         System.arraycopy(photos, newIndex, photos, newIndex + 1, size - newIndex);
         photos[newIndex] = photo;
         size++;
+        System.out.println(photos[newIndex]+ " @ " + photos[newIndex].getDate()+ " newSize= " + size);
+
         return true;
     }
 
@@ -47,7 +52,8 @@ public class AlbumImpl implements Album {
         }
         System.arraycopy(photos, indexPhotoForRemove + 1, photos, indexPhotoForRemove,
                 size - indexPhotoForRemove - 1);
-        photos[--size] = null;
+ //       photos[--size] = null;
+        size--;
         return true;
     }
 
@@ -82,19 +88,28 @@ public class AlbumImpl implements Album {
 
     @Override
     public Photo[] getPhotoBetweenDate(LocalDate dateFrom, LocalDate dateTo) {
-        Photo fromPhoto = new Photo(0, 0, "From", "urlRfom", dateFrom.atStartOfDay());
-        Photo toPhoto = new Photo(0, 0, "to", "urlTo", dateTo.atStartOfDay());
-        int iFrom = Arrays.binarySearch(photos, fromPhoto);
-        iFrom = iFrom > 0 ? iFrom : -1-iFrom;
-        int iTo = Arrays.binarySearch(photos, toPhoto);
-        iTo = iTo > 0 ? iTo  :  -1 - iTo;
-        Photo[] result = new Photo[iTo - iFrom];
-        for(int i = iFrom, j=0; i < iTo; i++,j++) {
-            result[j] = photos[i];
-        }
-    return result;
-    }
+        Photo fromPhoto = new Photo(0, Integer.MIN_VALUE, "From", "urlRfom", dateFrom.atStartOfDay());
+        System.out.println(dateFrom.atStartOfDay());
+        Photo toPhoto = new Photo(0, Integer.MIN_VALUE, "to", "urlTo", dateTo.atStartOfDay());
+        System.out.println(dateTo.atStartOfDay());
+        int iFrom = Arrays.binarySearch(photos, 0,size,fromPhoto, comparator);
+        System.out.println("iFrom= " + iFrom);
+ //       iFrom = iFrom > 0 ? iFrom : -1-iFrom;
+        iFrom = -1-iFrom;
+        int iTo = Arrays.binarySearch(photos, 0, size,toPhoto, comparator);
+        System.out.println("iTo= " + iTo);
+//        iTo = iTo > 0 ? iTo  :  -1 - iTo;
+        iTo = -1 - iTo;
 
+
+
+//        Photo[] result = new Photo[iTo - iFrom];
+//        for(int i = iFrom, j=0; i < iTo; i++,j++) {
+//            result[j] = photos[i];
+//        }
+//    return result;
+        return Arrays.copyOfRange(photos, iFrom, iTo);
+    }
     @Override
     public int size() {
         return size;
